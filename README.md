@@ -107,20 +107,20 @@ npx http-server
 
 ```
 WebApp/
-├── index.html          # Main application
-├── script.js           # Core JavaScript logic
-├── styles.css          # All styling
-├── sw.js              # Service Worker for PWA
-├── manifest.json       # PWA configuration
+├── index.html                    # Main application
+├── script.js                     # Core JavaScript logic
+├── styles.css                    # All styling
+├── sw.js                         # Service Worker for PWA
+├── manifest.json                 # PWA configuration
 ├── assets/
-│   ├── fonts/          # Inter font files (variable font)
-│   │   ├── inter.css   # Font-face declarations
-│   │   └── *.woff2     # Font files
-│   ├── icons/          # SVG icon files
-│   │   ├── icons.css   # Icon system CSS
-│   │   └── *.svg       # Individual icon files
-│   └── images/         # PWA icons
-└── README.md           # This file
+│   ├── fonts/                    # Inter font files (variable font)
+│   │   ├── inter.css             # Font-face declarations
+│   │   └── *.woff2               # Font files
+│   ├── icons/                    # SVG icon files
+│   │   ├── icons.css             # Icon system CSS
+│   │   └── icon-definition.js    # JavaScript Logic for Icons
+│   └── images/                   # PWA icons
+└── README.md                     # This file
 ```
 
 ## Icon System
@@ -133,15 +133,6 @@ The app uses an inline SVG icon system sourced from Lucide icons. All icons are 
 - **Size Variants**: `.icon`, `.icon-lg`, `.icon-xl`, `.icon-2xl`
 - **Dynamic Generation**: Icons created via JavaScript functions
 - **No External Dependencies**: Everything bundled locally
-
-### Available Icons
-
-- **Connectivity**: bluetooth, wifi, link, unlink
-- **Interface**: settings, plus, refresh, search, history
-- **Data**: chart-line, chart-pie, calculator, barcode
-- **Status**: check-circle, exclamation-circle, exclamation-triangle, info-circle, question-circle
-- **Content**: weight, scale-balanced, balance-scale, list, plus-circle
-- **Nutrition**: fire (energy), cookie-bite (carbs), cube (minerals)
 
 ### Usage
 

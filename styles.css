@@ -132,7 +132,7 @@ h4 .icon {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: all 0.2s ease;
-  height: fit-content;
+  height: 100%;
   display: flex;
   flex-direction: column;
   border: 1px solid #e5e7eb;
@@ -374,7 +374,6 @@ h4 .icon {
 .recent-items {
   max-height: 400px;
   overflow-y: auto;
-  padding-right: 8px;
 }
 
 .recent-items::-webkit-scrollbar {
@@ -423,7 +422,6 @@ h4 .icon {
 
 .recent-item:hover {
   background: #f1f5f9;
-  transform: translateX(4px);
 }
 
 .recent-item:last-child {
@@ -554,7 +552,6 @@ h4 .icon {
 
 /* Modal */
 .modal {
-  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -564,12 +561,22 @@ h4 .icon {
   backdrop-filter: blur(4px);
   z-index: 1000;
   padding: 20px;
-}
-
-.modal.show {
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal.hiding {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .modal-content {
@@ -580,20 +587,23 @@ h4 .icon {
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  animation: modalSlideIn 0.3s ease;
+  transform: translateY(-20px) scale(0.95);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease-out;
 }
 
-@keyframes modalSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px) scale(0.95);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+.modal.show .modal-content {
+  transform: translateY(0) scale(1);
+  opacity: 1;
 }
+
+.modal.hiding .modal-content {
+  transform: translateY(-20px) scale(0.95);
+  opacity: 0;
+  transition: transform 0.3s ease-in, opacity 0.3s ease-in;
+}
+
+
 
 .modal-header {
   padding: 24px;
@@ -744,7 +754,8 @@ h4 .icon {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+
+@media (max-width: 869px) {
   .header {
     margin: 0 16px 20px 16px;
     padding: 16px 0;
@@ -756,9 +767,11 @@ h4 .icon {
     gap: 16px;
   }
 
-  .header-actions {
+  .header .header-actions {
     width: 100%;
+    align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
 
   .settings-dropdown {
@@ -778,19 +791,21 @@ h4 .icon {
   }
 
   .card-header {
-    flex-wrap: wrap;
-    align-items: stretch;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
     gap: 12px;
     height: auto;
     min-height: 72px;
   }
 
   .card-header h2 {
-    flex: 1 1 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .header-actions {
-    justify-content: center;
+    justify-content: end;
     flex: 1 1 100%;
   }
 
@@ -834,11 +849,13 @@ h4 .icon {
 }
 
 /* Medium screens - tablet layout */
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 870px) and (max-width: 1024px) {
   .main-content {
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
     grid-template-areas:
-      "weight summary"
+      "weight weight"
+      "summary summary"
       "product recent";
     padding: 0 20px 20px 20px;
     gap: 20px;

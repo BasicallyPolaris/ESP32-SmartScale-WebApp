@@ -362,6 +362,18 @@ class SmartScaleApp {
       const data = JSON.parse(value);
 
       console.log("Received nutrition data:", data);
+
+      // Only process nutrition data if it contains meaningful information
+      // Skip empty or clearing messages when no product is scanned
+      if (
+        data.name === "" &&
+        data.kcal_per_100g === 0 &&
+        data.product_found !== false
+      ) {
+        console.log("Ignoring empty nutrition data (no product scanned)");
+        return;
+      }
+
       this.currentProduct = data;
       this.displayProductInfo(data);
     } catch (error) {
@@ -491,13 +503,22 @@ class SmartScaleApp {
     this.elements.noProduct.style.display = "block";
   }
 
-  clearProductInfo() {
+  clearProductInfo(showScanAnotherMessage = false) {
     // Reset to initial state (not error state)
     this.elements.noProduct.className = "no-product";
-    this.elements.noProduct.innerHTML = `
-      ${createIcon("barcode", "icon")}
-      <p>Scan a barcode to see product information</p>
-    `;
+
+    if (showScanAnotherMessage) {
+      this.elements.noProduct.innerHTML = `
+        ${createIcon("scan-barcode", "icon")}
+        <p>Scan another product and add it to your Summary</p>
+      `;
+    } else {
+      this.elements.noProduct.innerHTML = `
+        ${createIcon("scan-barcode", "icon")}
+        <p>Scan a barcode to see product information</p>
+      `;
+    }
+
     this.elements.noProduct.style.display = "block";
     this.elements.productInfo.style.display = "none";
     this.currentProduct = null;
@@ -561,14 +582,21 @@ class SmartScaleApp {
   }
 
   handleProductAdded(data) {
-    if (this.currentProduct) {
+    // Check if we have a valid current product that was successfully found
+    const hasValidProduct =
+      this.currentProduct &&
+      this.currentProduct.product_found !== false &&
+      this.currentProduct.name &&
+      this.currentProduct.name !== "";
+
+    if (hasValidProduct) {
       // Calculate current kcal based on weight
       const currentKcal =
         (this.currentWeight / 100.0) * (this.currentProduct.kcal_per_100g || 0);
 
       // Add to recent items
       const item = {
-        name: this.currentProduct.name || "Unknown Product",
+        name: this.currentProduct.name,
         weight: this.currentWeight,
         kcal: Math.max(0, currentKcal),
         timestamp: new Date(),
@@ -591,15 +619,17 @@ class SmartScaleApp {
           1
         )} kcal`
       );
-    } else {
-      console.warn("No current product when trying to add item");
-    }
 
-    // Clear current product display
-    this.elements.noProduct.style.display = "block";
-    this.elements.productInfo.style.display = "none";
-    this.currentProduct = null;
-    this.updateAddProductButton();
+      // Clear current product display with "scan another" message only if we had a valid product
+      this.clearProductInfo(true);
+    } else {
+      console.warn(
+        "No current product or product not found when trying to add item. Current product:",
+        this.currentProduct
+      );
+      // Clear current product display with default message if no valid product
+      this.clearProductInfo(false);
+    }
   }
 
   handleFullReset(data) {
@@ -610,12 +640,9 @@ class SmartScaleApp {
     this.currentProduct = null;
     this.nutritionTotals = {}; // Clear nutrition totals
 
-    this.elements.noProduct.style.display = "block";
-    this.elements.productInfo.style.display = "none";
-
+    this.clearProductInfo(false);
     this.updateSummary();
     this.updateRecentItems();
-    this.updateAddProductButton();
   }
 
   handleWiFiConfigStatus(data) {
@@ -687,6 +714,17 @@ class SmartScaleApp {
     container.innerHTML = itemsHtml;
   }
 
+  // Helper function to hide modal with animation
+  hideModalWithAnimation(modal, callback = null) {
+    modal.classList.add("hiding");
+    modal.classList.remove("show");
+
+    setTimeout(() => {
+      modal.classList.remove("hiding");
+      if (callback) callback();
+    }, 300); // Match the CSS transition duration
+  }
+
   // WiFi Configuration
   showWiFiModal() {
     this.elements.wifiModal.classList.add("show");
@@ -694,8 +732,9 @@ class SmartScaleApp {
   }
 
   hideWiFiModal() {
-    this.elements.wifiModal.classList.remove("show");
-    this.elements.wifiForm.reset();
+    this.hideModalWithAnimation(this.elements.wifiModal, () => {
+      this.elements.wifiForm.reset();
+    });
   }
 
   async handleWiFiSubmit(event) {
@@ -739,19 +778,16 @@ class SmartScaleApp {
     const notification = document.createElement("div");
     notification.className = `notification ${type}`;
 
-    const iconClass =
+    const iconName =
       type === "success"
-        ? "icon-check-circle"
+        ? "check-circle"
         : type === "error"
-        ? "icon-exclamation-circle"
+        ? "exclamation-circle"
         : type === "warning"
-        ? "icon-exclamation-triangle"
-        : "icon-info-circle";
+        ? "exclamation-triangle"
+        : "info-circle";
 
-    notification.innerHTML = `
-            <div class="icon ${iconClass}"></div>
-            <span>${message}</span>
-        `;
+    notification.innerHTML = createIcon(iconName, "icon") + message;
 
     this.elements.notifications.appendChild(notification);
 
@@ -825,7 +861,7 @@ class SmartScaleApp {
   }
 
   hideResetModal() {
-    this.elements.resetModal.classList.remove("show");
+    this.hideModalWithAnimation(this.elements.resetModal);
   }
 
   async sendResetCommand() {
@@ -911,7 +947,7 @@ class SmartScaleApp {
   }
 
   hideNutritionModal() {
-    this.elements.nutritionModal.classList.remove("show");
+    this.hideModalWithAnimation(this.elements.nutritionModal);
   }
 
   displayNutritionalSummary() {
@@ -1026,7 +1062,26 @@ class SmartScaleApp {
 // Initialize the app when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   window.smartScaleApp = new SmartScaleApp();
+
+  // Handle PWA shortcut actions
+  handlePWAShortcuts();
 });
+
+// Handle PWA shortcut functionality
+function handlePWAShortcuts() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const action = urlParams.get("action");
+
+  if (action === "connect") {
+    // Auto-connect when launched from "Connect Scale" shortcut
+    setTimeout(() => {
+      if (window.smartScaleApp && !window.smartScaleApp.isConnected) {
+        console.log("PWA shortcut: Auto-connecting to scale...");
+        window.smartScaleApp.toggleConnection();
+      }
+    }, 1000); // Small delay to ensure app is fully initialized
+  }
+}
 
 // Service Worker registration for PWA capabilities
 if ("serviceWorker" in navigator) {

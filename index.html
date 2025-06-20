@@ -17,11 +17,10 @@
   <link rel="manifest" href="./manifest.json">
 
   <!-- PWA theme -->
-  <meta name="theme-color" content="#667eea">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="SmartScale">
-  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="./assets/images/icon-192.png">
 </head>
 
 <body>
@@ -41,16 +40,16 @@
           <h1>SmartScale</h1>
         </div>
         <div class="header-actions">
-          <button id="connectBtn" class="btn connection-btn disconnected">
+          <button id="connectBtn" class="btn connection-btn disconnected" type="button">
             <div id="connectionIcon" class="icon icon-unlink"></div>
             <span id="statusText">Connect to Scale</span>
           </button>
           <div class="settings-dropdown">
-            <button id="settingsBtn" class="btn btn-secondary">
+            <button id="settingsBtn" class="btn btn-secondary" type="button">
               <div class="icon icon-settings"></div>
             </button>
             <div id="settingsMenu" class="settings-menu">
-              <button id="wifiConfigBtn" class="settings-item" disabled>
+              <button id="wifiConfigBtn" class="settings-item" disabled type="button">
                 <div class="icon icon-wifi"></div> Configure WiFi
               </button>
             </div>
@@ -67,7 +66,7 @@
             <i class="icon icon-scale-balanced"></i> Current Weight
           </h2>
           <div class="header-actions">
-            <button id="tareBtn" class="btn btn-secondary" disabled>
+            <button id="tareBtn" class="btn btn-secondary" disabled type="button">
               <i class="icon icon-balance-scale"></i> Tare Scale
             </button>
           </div>
@@ -86,7 +85,7 @@
           <h2>
             <i class="icon icon-barcode"></i> Current Product
           </h2>
-          <button id="addProductBtn" class="btn btn-primary" disabled>
+          <button id="addProductBtn" class="btn btn-primary" disabled type="button">
             <i class="icon icon-plus"></i> Add to Summary
           </button>
         </div>
@@ -121,10 +120,11 @@
             <i class="icon icon-chart-line"></i> Summary
           </h2>
           <div class="header-actions">
-            <button id="resetBtn" class="btn btn-danger" disabled>
+            <button id="resetBtn" class="btn btn-danger" disabled type="button">
               <i class="icon icon-refresh"></i> Reset
             </button>
-            <button id="nutritionSummaryBtn" class="btn btn-info" disabled title="View Nutritional Summary">
+            <button id="nutritionSummaryBtn" class="btn btn-info" disabled title="View Nutritional Summary"
+              type="button">
               <i class="icon icon-info-circle"></i>
             </button>
           </div>
@@ -172,7 +172,7 @@
           <h3>
             <i class="icon icon-wifi"></i> Configure WiFi
           </h3>
-          <button id="closeWifiModal" class="btn-close">&times;</button>
+          <button id="closeWifiModal" class="btn-close" type="button">&times;</button>
         </div>
         <div class="modal-body">
           <form id="wifiForm">
@@ -185,8 +185,8 @@
               <input type="password" id="passwordInput" required>
             </div>
             <div class="form-actions">
-              <button type="button" id="cancelWifiBtn" class="btn btn-secondary">Cancel</button>
-              <button type="submit" class="btn btn-primary">Save Configuration</button>
+              <button id="cancelWifiBtn" class="btn btn-secondary" type="button">Cancel</button>
+              <button id="saveWifiBtn" class="btn btn-primary" type="submit">Save Configuration</button>
             </div>
           </form>
         </div>
@@ -200,7 +200,7 @@
           <h3>
             <i class="icon icon-exclamation-triangle"></i> Reset Summary
           </h3>
-          <button id="closeResetModal" class="btn-close">&times;</button>
+          <button id="closeResetModal" class="btn-close" type="button">&times;</button>
         </div>
         <div class="modal-body">
           <p>Are you sure you want to reset the entire summary?</p>
@@ -214,8 +214,8 @@
             </ul>
           </div>
           <div class="form-actions">
-            <button id="cancelResetBtn" class="btn btn-secondary">Cancel</button>
-            <button id="confirmResetBtn" class="btn btn-danger">Reset Summary</button>
+            <button id="cancelResetBtn" class="btn btn-secondary" type="button">Cancel</button>
+            <button id="confirmResetBtn" class="btn btn-danger" type="button">Reset Summary</button>
           </div>
         </div>
       </div>
@@ -226,9 +226,9 @@
       <div class="modal-content nutrition-modal-content">
         <div class="modal-header">
           <h3>
-            <i class="icon icon-chart-pie"></i> Nutritional Summary
+            <i class="icon icon-chart-pie icon-lg"></i> Nutritional Summary
           </h3>
-          <button id="closeNutritionModal" class="btn-close">&times;</button>
+          <button id="closeNutritionModal" class="btn-close" type="button">&times;</button>
         </div>
         <div class="modal-body">
           <div id="nutritionSummaryContent" class="nutrition-summary-content">

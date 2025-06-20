@@ -92,11 +92,6 @@ function replaceIconTags() {
   });
 }
 
-// Keep backward compatibility
-function replaceIconDivs() {
-  replaceIconTags();
-}
-
 // Export for use in other scripts
 if (typeof module !== "undefined" && module.exports) {
   module.exports = { iconDefinitions, createIcon, replaceIconDivs };

@@ -1,5 +1,5 @@
 // Service Worker for SmartScale PWA
-const CACHE_NAME = "smartscale-v1.0.0";
+const CACHE_NAME = "smartscale-v1.1.0";
 const urlsToCache = [
   "./",
   "./index.html",
@@ -8,6 +8,12 @@ const urlsToCache = [
   "./assets/fonts/inter.css",
   "./assets/icons/icons.css",
   "./assets/icons/icon-definitions.js",
+  "./assets/fonts/Inter-VariableFont.ttf",
+  "./assets/fonts/Inter-Italic-VariableFont.ttf",
+  "./assets/images/icon-192.png",
+  "./assets/images/icon-512.png",
+  "./assets/images/icon-1024.png",
+  "./manifest.json",
 ];
 
 // Install event - cache resources

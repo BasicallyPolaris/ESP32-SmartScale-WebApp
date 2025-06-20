@@ -4,7 +4,7 @@
   font-style: normal;
   font-display: swap;
   font-weight: 100 900;
-  src: url('./Inter-VariableFont.ttf') format('ttf');
+  src: url('./Inter-VariableFont.ttf') format('truetype');
 }
 
 @font-face {
@@ -12,5 +12,5 @@
   font-style: italic;
   font-display: swap;
   font-weight: 100 900;
-  src: url('./Inter-Italic-VariableFont.ttf') format('ttf');
+  src: url('./Inter-Italic-VariableFont.ttf') format('truetype');
 }

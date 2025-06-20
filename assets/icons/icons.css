@@ -1,0 +1,14 @@
+/* Icons are handled by icon-definitions.js */
+/* This file exists to prevent 404 errors */
+
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+
+.icon-lg {
+  width: 1.5em;
+  height: 1.5em;
+}

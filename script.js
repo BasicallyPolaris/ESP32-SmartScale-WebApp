@@ -308,7 +308,12 @@ class SmartScaleApp {
       connectBtn.classList.remove("disconnected");
       connectBtn.classList.add("connected");
       connectBtn.disabled = true;
-      iconElement.className = "fas fa-link";
+      iconElement.outerHTML = createIcon("link", "icon").replace(
+        '<svg class="icon"',
+        '<svg id="connectionIcon" class="icon"'
+      );
+      // Get the new element after replacement
+      this.elements.connectionIcon = document.getElementById("connectionIcon");
       statusText.textContent = "Connected";
       this.elements.wifiConfigBtn.disabled = false;
       this.elements.tareBtn.disabled = false;
@@ -320,7 +325,12 @@ class SmartScaleApp {
       connectBtn.classList.remove("connected");
       connectBtn.classList.add("disconnected");
       connectBtn.disabled = false;
-      iconElement.className = "fa-brands fa-bluetooth-b";
+      iconElement.outerHTML = createIcon("bluetooth", "icon").replace(
+        '<svg class="icon"',
+        '<svg id="connectionIcon" class="icon"'
+      );
+      // Get the new element after replacement
+      this.elements.connectionIcon = document.getElementById("connectionIcon");
       statusText.textContent = "Connect to Scale";
       this.elements.wifiConfigBtn.disabled = true;
       this.elements.tareBtn.disabled = true;
@@ -437,39 +447,43 @@ class SmartScaleApp {
 
     // Show custom not found message with error styling
     let message = "";
-    let icon = "fas fa-exclamation-triangle";
+    let iconClass = "icon-exclamation-triangle";
 
     switch (errorType) {
       case "Product Not Found":
         message = "Sorry, this product could not be found in our database.";
-        icon = "fas fa-search";
+        iconClass = "icon-search";
         break;
       case "No WiFi Connection":
         message = "No WiFi connection available. Cannot fetch product data.";
-        icon = "fas fa-wifi";
+        iconClass = "icon-wifi";
         break;
       case "Network Error":
         message = "Network error occurred while fetching product data.";
-        icon = "fas fa-exclamation-triangle";
+        iconClass = "icon-exclamation-triangle";
         break;
       case "Data Error":
         message = "Error processing product data from server.";
-        icon = "fas fa-exclamation-triangle";
+        iconClass = "icon-exclamation-triangle";
         break;
       case "No Nutrition Data":
         message = "Product found but nutrition information is not available.";
-        icon = "fas fa-info-circle";
+        iconClass = "icon-info-circle";
         break;
       default:
         message = "Product information could not be retrieved.";
-        icon = "fas fa-question-circle";
+        iconClass = "icon-question-circle";
         break;
     }
 
     // Add error class to distinguish from initial state
     this.elements.noProduct.className = "no-product error-state";
+
+    // Get the icon name from the class
+    const iconName = iconClass.replace("icon-", "");
+
     this.elements.noProduct.innerHTML = `
-      <i class="${icon}"></i>
+      ${createIcon(iconName, "icon")}
       <h3>Product Not Available</h3>
       <p>${message}</p>
       <small>Try scanning another product or check your connection.</small>
@@ -481,7 +495,7 @@ class SmartScaleApp {
     // Reset to initial state (not error state)
     this.elements.noProduct.className = "no-product";
     this.elements.noProduct.innerHTML = `
-      <i class="fas fa-barcode"></i>
+      ${createIcon("barcode", "icon")}
       <p>Scan a barcode to see product information</p>
     `;
     this.elements.noProduct.style.display = "block";
@@ -641,7 +655,7 @@ class SmartScaleApp {
     if (this.recentItems.length === 0) {
       container.innerHTML = `
         <div class="no-items">
-          <i class="fas fa-history"></i>
+          ${createIcon("history", "icon")}
           <p>No items added yet</p>
         </div>
       `;
@@ -725,17 +739,17 @@ class SmartScaleApp {
     const notification = document.createElement("div");
     notification.className = `notification ${type}`;
 
-    const icon =
+    const iconClass =
       type === "success"
-        ? "check-circle"
+        ? "icon-check-circle"
         : type === "error"
-        ? "exclamation-circle"
+        ? "icon-exclamation-circle"
         : type === "warning"
-        ? "exclamation-triangle"
-        : "info-circle";
+        ? "icon-exclamation-triangle"
+        : "icon-info-circle";
 
     notification.innerHTML = `
-            <i class="fas fa-${icon}"></i>
+            <div class="icon ${iconClass}"></div>
             <span>${message}</span>
         `;
 
@@ -906,7 +920,7 @@ class SmartScaleApp {
     if (!hasData) {
       this.elements.nutritionSummaryContent.innerHTML = `
         <div class="no-nutrition-data">
-          <i class="fas fa-chart-pie"></i>
+          ${createIcon("chart-pie", "icon")}
           <p>No nutritional data available yet. Add some products to see the summary!</p>
         </div>
       `;
@@ -916,7 +930,7 @@ class SmartScaleApp {
     // Create nutritional summary display
     let html = `
       <div class="nutrition-totals">
-        <h4><i class="fas fa-calculator"></i> Total Nutritional Values</h4>
+        <h4>${createIcon("calculator", "icon")} Total Nutritional Values</h4>
         <div class="totals-grid">
           <div class="total-item">
             <div class="total-value">${this.totalWeight.toFixed(1)}</div>
@@ -939,7 +953,7 @@ class SmartScaleApp {
     // Organize nutrition data into categories
     const categories = {
       "Energy & Macronutrients": {
-        icon: "fas fa-fire",
+        icon: "icon-fire",
         items: {
           fat_100g: "Total Fat",
           "saturated-fat_100g": "Saturated Fat",
@@ -948,14 +962,14 @@ class SmartScaleApp {
         },
       },
       "Carbohydrate Details": {
-        icon: "fas fa-cookie-bite",
+        icon: "icon-cookie-bite",
         items: {
           sugars_100g: "Sugars",
           fiber_100g: "Dietary Fiber",
         },
       },
       "Minerals & Sodium": {
-        icon: "fas fa-cube",
+        icon: "icon-cube",
         items: {
           salt_100g: "Salt",
           sodium_100g: "Sodium",
@@ -971,7 +985,10 @@ class SmartScaleApp {
       if (categoryHasData) {
         html += `
           <div class="nutrition-category">
-            <h4><i class="${category.icon}"></i> ${categoryName}</h4>
+            <h4>${createIcon(
+              category.icon.replace("icon-", ""),
+              "icon"
+            )} ${categoryName}</h4>
         `;
 
         Object.entries(category.items).forEach(([key, label]) => {

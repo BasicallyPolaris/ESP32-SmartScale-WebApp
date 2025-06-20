@@ -1,5 +1,5 @@
 // Service Worker for SmartScale PWA
-const CACHE_NAME = "smartscale-v1.1.0";
+const CACHE_NAME = "smartscale-v1.1.2";
 const urlsToCache = [
   "./",
   "./index.html",

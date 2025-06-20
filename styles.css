@@ -21,12 +21,23 @@ body {
 }
 
 /* Icon spacing in headers and buttons */
+.icon {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  vertical-align: middle;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 h2 .icon,
 h3 .icon,
 h4 .icon {
-  margin-right: 8px;
-  display: inline-block;
-  vertical-align: middle;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .btn .icon {

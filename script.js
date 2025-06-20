@@ -276,7 +276,7 @@ class SmartScaleApp {
       this.showNotification("Successfully connected to SmartScale!", "success");
     } catch (error) {
       console.error("Connection failed:", error);
-      this.showNotification(`Connection failed: ${error.message}`, "error");
+      this.showNotification(`Connection failed. Please try again.`, "error");
       this.updateConnectionStatus(false);
     }
   }

@@ -1,0 +1,39 @@
+{
+  "name": "SmartScale Dashboard",
+  "short_name": "SmartScale",
+  "description": "Smart nutrition tracking scale with BLE connectivity",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#667eea",
+  "theme_color": "#667eea",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "categories": ["health", "utilities", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Connect Scale",
+      "short_name": "Connect",
+      "description": "Connect to your SmartScale",
+      "url": "./?action=connect",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

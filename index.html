@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartScale Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#667eea">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="SmartScale">
+  <link rel="apple-touch-icon" href="icon-192.png">
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="header-content">
+        <div class="header-title">
+          <i class="fas fa-weight icon"></i>
+          <h1>SmartScale</h1>
+        </div>
+        <div class="header-actions">
+          <button id="connectBtn" class="btn connection-btn disconnected">
+            <i id="connectionIcon" class="fas fa-unlink"></i>
+            <span id="statusText">Connect to Scale</span>
+          </button>
+          <div class="settings-dropdown">
+            <button id="settingsBtn" class="btn btn-secondary">
+              <i class="fas fa-cog"></i>
+            </button>
+            <div id="settingsMenu" class="settings-menu">
+              <button id="wifiConfigBtn" class="settings-item" disabled>
+                <i class="fas fa-wifi"></i> Configure WiFi
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <!-- Current Weight Card -->
+      <div class="card weight-card">
+        <div class="card-header">
+          <h2><i class="fas fa-scale-balanced"></i> Current Weight</h2>
+        </div>
+        <div class="card-content">
+          <div class="weight-display">
+            <span id="currentWeight">0.0</span>
+            <span class="unit">g</span>
+          </div>
+          <div class="weight-actions">
+            <button id="tareBtn" class="btn btn-secondary" disabled>
+              <i class="fas fa-balance-scale"></i> Tare Scale
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Current Product Card -->
+      <div class="card product-card">
+        <div class="card-header">
+          <h2><i class="fas fa-barcode"></i> Current Product</h2>
+          <button id="addProductBtn" class="btn btn-primary" disabled>
+            <i class="fas fa-plus"></i> Add to Summary
+          </button>
+        </div>
+        <div class="card-content">
+          <div id="noProduct" class="no-product">
+            <i class="fas fa-barcode"></i>
+            <p>Scan a barcode to see product information</p>
+          </div>
+          <div id="productInfo" class="product-info" style="display: none;">
+            <h3 id="productName">Product Name</h3>
+            <div class="nutrition-grid">
+              <div class="nutrition-item">
+                <span class="label">Energy (current)</span>
+                <span id="currentKcal" class="value">0 kcal</span>
+              </div>
+              <div class="nutrition-item">
+                <span class="label">Energy (per 100g)</span>
+                <span id="kcalPer100g" class="value">0 kcal</span>
+              </div>
+            </div>
+            <div id="detailedNutrition" class="detailed-nutrition">
+              <!-- Detailed nutrition facts will be populated here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Card -->
+      <div class="card summary-card">
+        <div class="card-header">
+          <h2><i class="fas fa-chart-line"></i> Summary</h2>
+          <div class="header-actions">
+            <button id="resetBtn" class="btn btn-danger" disabled>
+              <i class="fas fa-refresh"></i> Reset
+            </button>
+            <button id="nutritionSummaryBtn" class="btn btn-info" disabled title="View Nutritional Summary">
+              <i class="fas fa-info-circle"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="summary-grid">
+            <div class="summary-item">
+              <div class="summary-value" id="totalWeight">0.0</div>
+              <div class="summary-label">Total Weight (g)</div>
+            </div>
+            <div class="summary-item">
+              <div class="summary-value" id="totalKcal">0.0</div>
+              <div class="summary-label">Total Energy (kcal)</div>
+            </div>
+            <div class="summary-item">
+              <div class="summary-value" id="itemCount">0</div>
+              <div class="summary-label">Items Added</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Items Card -->
+      <div class="card items-card">
+        <div class="card-header">
+          <h2><i class="fas fa-list"></i> Recent Items</h2>
+        </div>
+        <div class="card-content">
+          <div id="recentItems" class="recent-items">
+            <div class="no-items">
+              <i class="fas fa-plus-circle"></i>
+              <p>No items added yet</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- WiFi Configuration Modal -->
+    <div id="wifiModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-wifi"></i> Configure WiFi</h3>
+          <button id="closeWifiModal" class="btn-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="wifiForm">
+            <div class="form-group">
+              <label for="ssidInput">Network Name (SSID)</label>
+              <input type="text" id="ssidInput" required>
+            </div>
+            <div class="form-group">
+              <label for="passwordInput">Password</label>
+              <input type="password" id="passwordInput" required>
+            </div>
+            <div class="form-actions">
+              <button type="button" id="cancelWifiBtn" class="btn btn-secondary">Cancel</button>
+              <button type="submit" class="btn btn-primary">Save Configuration</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reset Confirmation Modal -->
+    <div id="resetModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-exclamation-triangle"></i> Reset Summary</h3>
+          <button id="closeResetModal" class="btn-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to reset the entire summary?</p>
+          <p><strong>This will clear all data including:</strong></p>
+          <div class="reset-list">
+            <ul>
+              <li>Total weight and calories</li>
+              <li>All added items</li>
+              <li>Current product information</li>
+              <li>Nutritional summary data</li>
+            </ul>
+          </div>
+          <div class="form-actions">
+            <button id="cancelResetBtn" class="btn btn-secondary">Cancel</button>
+            <button id="confirmResetBtn" class="btn btn-danger">Reset Summary</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nutritional Summary Modal -->
+    <div id="nutritionModal" class="modal">
+      <div class="modal-content nutrition-modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-chart-pie"></i> Nutritional Summary</h3>
+          <button id="closeNutritionModal" class="btn-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div id="nutritionSummaryContent" class="nutrition-summary-content">
+            <div class="no-nutrition-data">
+              <i class="fas fa-chart-pie"></i>
+              <p>No nutritional data available yet. Add some products to see the summary!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div id="notifications" class="notifications"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
